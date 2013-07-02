@@ -8,68 +8,7 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/javascripts/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-		<script type="text/javascript">
-			var socket = io.connect('http://node-streaming-maps.herokuapp.com/');
-			var mapObj,num=-1,latlng,marker,icon,markers = [],infowindow,
-			iconSize=new google.maps.Size(32,32);
-			socket.on('stream', function(data){
-				if (data.geo){
-					num++;
-					$('#tweets').text(num+1);
-					icon = new google.maps.MarkerImage(data.user.profile_image_url_https);
-					icon.size = iconSize;
-					latlng = new google.maps.LatLng(data.geo.coordinates[0], data.geo.coordinates[1]);
-					marker = new google.maps.Marker({
-						position: latlng, 
-						map: mapObj,
-						icon: icon,
-						title:data.user.screen_name,
-						animation: google.maps.Animation.DROP
-					});
-					
-					marker.set("latlng", latlng);
-					marker.set("id", num);
-					marker.set("url", "https://twitter.com/"+data.user.screen_name+"/status/"+data.id_str);
-					marker.set("constents", '<img src="'+data.user.profile_image_url_https+'" width="42" height="42" />'+
-											'<a> '+ data.user.screen_name +'</a>'+
-											'<br />'+data.text);
-					markers.push(marker);
-					google.maps.event.addListener(marker, 'mouseover', function(e) {
-						infowindow = new google.maps.InfoWindow({ content: this.get("constents")});
-						infowindow.setPosition(this.get("latlng")); 
-						infowindow.open(mapObj, markers[this.get("id")]);
-					});
-					
-					google.maps.event.addListener(marker, 'mouseout', function(e) {
-						infowindow.close();
-					});
-					
-					google.maps.event.addListener(marker, 'click', function(e) {
-						window.open(this.get("url"));
-					});
-				}
-			});
-			
-			function initialize() {
-				var latlng = new google.maps.LatLng(20,160);
-				var opts = {
-					zoom: 2,
-					center: latlng,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				};
-				mapObj = new google.maps.Map(document.getElementById("map_canvas"), opts);
-			}
-			 
-			$(function(){
-				initialize();
-				$(window).resize(resizeHandler);
-				function resizeHandler() {
-					$('#map_canvas').css({'width':$(window).width()+'px','height':$(window).height()+'px'});
-					$('header').css({'left':$(window).width()/2-250+'px'})
-				};
-				resizeHandler();
-			})
-		</script>
+		<script src="/javascripts/script.js"></script>
 	</head>
 <body>
 	<header>
